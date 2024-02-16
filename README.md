@@ -15,11 +15,14 @@ NUEVA
 
 
 ## Requisitos
-- Una tarjeta SD (uso temporal)
+- Una tarjeta SD (uso temporal- hay tarjetas que no las detecta bien)
 - Adaptador USB a Serie (3.3V) + Cables Dupont (requerido sólo - paso 1 - opción 1)
 
 ![](img_USB_serial_converter.jpg)
 
+## ¿Como compruebo si la SD funciona correctamente?
+
+Al conectarla en formato FAT32 te creará una carpeta npc con varias subcarpetas.
 
 ## Paso 1 - Conectar la cámara al WiFi
 
@@ -52,51 +55,37 @@ Una vez modificada y preparada, copiamos esta linea de código a la ventana, y p
 
 echo 'ctrl_interface=/etc/Wireless\nnetwork={\n    ssid="YOURSSID"\n    psk="YOURPSK"\n}' > /rom/wpa_supplicant0.conf
 
+## Paso 2 - Ver video de la cámara
 
-## Paso 2 - En desarrollo - Hack persistente con mejoras
+Debemos descargar un programa para poder ver el video de la cámara como VLC o una aplicación de Android que soporte RTSP.
+
+Datos de conexión de video:
+ - Servidor RTSP/onvif en la dirección IP de la cámara: rtsp://admin:20160404@{YOUR_IP}/onvif1 or rtsp://admin:20160404@{YOUR_IP}/onvif2
+
+## Paso 3 - Hack persistente
+
+Para este último paso, la version ANTIGUA es una versión permite escritura de sus archivos en algunas carpetas. Por tanto, a través del puerto serie, tenemos acceso al usuario root y ejecutaremos el hack, que cargará y actualizará unos archivos desde la SD.
+
+Para ejecutar el hack, si la SD ha sido detecta correctamente, ejecutamos a través del puerto serie:
+
+```bash
+busybox sh /mnt/disc1/install_hack.sh
+```
+
+Sino quiere instalarlo, comente la última linea del script antes de su ejecución.
+
+Nos perdirá una nueva contraseña, la introducimos dos veces y ya estaría el hack (sugerencia: dg-m1q2024). Si ejecutaramos el hack de nuevo, nos pediría la contraseña anterior.
 
 El hack tiene estas nuevas funciones
 - Elimina y bloquea la comunicación con los servicios en la nube.
-- Habilita un servidor SSH - usuario: , password: 
-
-- Servidor RTSP/onvif en la dirección IP de la cámara
-
-
-La version ANTIGUA es una versión permite escritura de sus archivos. Vamos a instalar el siguiente HACK.
-
-Conectamos la SD al PC, formateamos la SD en FAT32, y descargamos el hack zsgx1hacks-v0.4.zip del siguiente enlace o desde este repositorio.
-
-- https://github.com/ant-thomas/zsgx1hacks
-
-Una vez descargado, descomprimimos los archivos y los copiamos a la SD, podemos modificar el config.txt para hacer el hack persistente, os recomiendo primero probar el hack y luego si funciona, hacerlo persistente. O bien dejar la SD puesta.
-
-Este hack tiene las siguientes funciones:
-
-- No communication to cloud services
-- RTSP/onvif server on the IP address of the camera (VLC)
-- SSH server
-
-rtsp://admin:20160404@192.168.1.6/onvif1
-
-#### Trozo de un script a añadir
-# setup and install dropbear ssh server
-cp /home/hack/dropbearmulti /bin/dropbearmulti
-mkdir /etc/dropbear
-cp /home/hack/dropbear_ecdsa_host_key /etc/dropbear/dropbear_ecdsa_host_key
-/bin/dropbearmulti dropbear
-
-# sync the time
-¿ (sleep 20 && ntpd -q -p es.pool.ntp.org ) & ?
+- Instala y habilita un servidor SSH - usuario: root, password: {La contraseña introducida cuando instalas el hack}, ya no es necesario usar el convertidor, a no ser que cambies la WiFi (un truco para esto puede ser utilizar el móvil con el SSID y la contraseña del antiguo WiFi).
 
 Ya podemos desconectar la cámara de la luz, retirar el cableado y cerrarla.
 
-# References
+#### C
+
+## References
 - https://github.com/yuvadm/DG-M1Q (Saber que fichero editar que se ejecuta cuando se inicia la cámara)
-- https://github.com/rc042/DG-M1Q ()
+- https://github.com/rc042/DG-M1Q (dhcp.script para evitar conexiones con el exterior)
 - https://github.com/kfowlks/DG-M1Q (Información clara para conectarte por RTSP)
-- https://github.com/ant-thomas/zsgx1hacks (Hacks para camaras con el mismo chip)
-
-https://github.com/dc35956/gk7102-hack
-
-https://robert.penz.name/1348/hikam-a7-iot-security-at-its-worst/
-https://jumpespjump.blogspot.com/2015/09/how-i-hacked-my-ip-camera-and-found.html?m=1
+- https://github.com/ant-thomas/zsgx1hacks (Hacks para camaras con el mismo chip GK7102 - Hemos extraido el servidor ssh)

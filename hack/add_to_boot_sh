@@ -1,0 +1,9 @@
+
+# Actualizar información del usuario root
+# para instalar la contraseña establecida
+# cuando hemos instalado el hack
+cp /rom/postconf/passwd /etc/
+cp /rom/postconf/shadow /etc/
+
+# Ejecutamos el servidor ssh en el sistema
+/rom/postconf/dropbearmulti dropbear -r /rom/postconf/dropbear_ecdsa_host_key &
