@@ -53,7 +53,9 @@ Por último, debemos copiar la siguiente linea, cambiando YOURSSID por el nombre
 
 Una vez modificada y preparada, copiamos esta linea de código a la ventana, y pulsamos intro. Esperamos dos minutos más a que lea el fichero en algún momento y ya estará conectada a la WiFi.
 
+```bash
 echo 'ctrl_interface=/etc/Wireless\nnetwork={\n    ssid="YOURSSID"\n    psk="YOURPSK"\n}' > /rom/wpa_supplicant0.conf
+```
 
 ## Paso 2 - Ver video de la cámara
 
@@ -81,8 +83,6 @@ El hack tiene estas nuevas funciones
 - Instala y habilita un servidor SSH - usuario: root, password: {La contraseña introducida cuando instalas el hack}, ya no es necesario usar el convertidor, a no ser que cambies la WiFi (un truco para esto puede ser utilizar el móvil con el SSID y la contraseña del antiguo WiFi).
 
 Ya podemos desconectar la cámara de la luz, retirar el cableado y cerrarla.
-
-#### C
 
 ## References
 - https://github.com/yuvadm/DG-M1Q (Saber que fichero editar que se ejecuta cuando se inicia la cámara)
